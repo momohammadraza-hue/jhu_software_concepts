@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Projects — Mohammad Raza{% endblock %}
+
+{% block content %}
+<h1>Projects</h1>
+
+<!-- Green project cards, styled in CSS -->
+<ul class="project-list">
+  {% for p in projects %}
+  <li class="project-item">
+    <h3>{{ p.title }}</h3>
+    <p>{{ p.description }}</p>
+    <p>
+      <a href="{{ p.github_url }}" target="_blank" rel="noopener">View on GitHub</a>
+    </p>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

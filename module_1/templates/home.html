@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Home — Mohammad{% endblock %}
+
+{% block content %}
+<section class="split">
+  <div class="left">
+    <!-- Deep-blue content card -->
+    <div class="content-card">
+      <h1>Mohammad</h1>
+      <h2>Senior Technical Program Manager</h2>
+      <p>
+        Living in Seattle, as a TPM I help drive large-scale datacenter and GPU deployment programs with a focus on
+        solving tough challenges, simplifying processes, and delivering results.
+        I love innovating and building solutions to all types of problems.
+        My wife and I love cooking, boating, and driving in the mountains while learning as much as we can!
+      </p>
+    </div>
+  </div>
+
+  <div class="right">
+    <!-- Explicit size reserves space; CSS keeps it responsive -->
+    <img
+      src="{{ url_for('static', filename='img/profile.jpg') }}"
+      alt="Profile photo"
+      class="profile-img"
+      width="300"
+      height="300">
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- Title set per page -->
+  <title>{% block title %}Personal Site{% endblock %}</title>
+  <!-- Shared CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<!-- Body gets the active page class (home/projects/contact) -->
+<body class="{{ active }}">
+
+  <!-- Header: brand (left), nav (right). Header also gets the active class
+       so the navbar color can change per page. -->
+  <header class="site-header {{ active }}">
+    <div class="brand">
+      <a href="{{ url_for('home') }}">Mohammad Raza</a>
+    </div>
+    <nav class="top-nav">
+      <!-- Active tab gets .active (inverse style) -->
+      <a class="nav-link {% if active=='home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+      <a class="nav-link {% if active=='projects' %}active{% endif %}" href="{{ url_for('projects') }}">Projects</a>
+      <a class="nav-link {% if active=='contact' %}active{% endif %}" href="{{ url_for('contact') }}">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Page content -->
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Shared footer -->
+  <footer class="site-footer">
+    <p>&copy; 2025 Mohammad Raza</p>
+  </footer>
+</body>
+</html>
