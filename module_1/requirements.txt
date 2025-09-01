@@ -2,12 +2,14 @@ JHU Modern Software Concepts — Module 1: Personal Website
 Author: Mohammad Raza  
 
 What this is  
-- A simple Flask app for my personal site (Module 1).  
-- Three pages: Home, Projects, Contact. Minimal and clean.  
+- A Flask app for my personal site (Module 1).  
+- Three pages: Home, Projects, Contact.  
+- Each page has its own theme (blue, green, bark brown) with hover + active nav states.  
+- Content shown in cards for clarity and consistent design.  
 
 What you need  
 - Python 3.10+  
-- Flask (install from requirements.txt)  
+- Flask (install from requirements.txt — pinned version included)  
 - Virtual environment recommended  
 
 How to run it  
@@ -22,19 +24,23 @@ Where it runs
 - Bound to 0.0.0.0:8080 (per assignment)  
 
 Pages  
-- `/` → Home (name, role, short bio)  
-- `/projects` → Module overview + GitHub link  
-- `/contact` → Email + LinkedIn  
+- `/` → Home (bio card left, photo right)  
+- `/projects` → Project card + GitHub link  
+- `/contact` → Bark card with email + LinkedIn  
 
 Structure  
 - run.py → app entry point  
-- /templates → HTML templates  
-- /static → CSS + images  
+- /templates → HTML templates (base, home, projects, contact)  
+- /static/css → style.css (per-page themes, cards, nav hover/active)  
+- /static/img → profile.jpg  
+
+Deliverables  
+- requirements.txt → pinned dependencies  
+- README.txt → run instructions + notes (this file)  
+- screenshots.pdf → full-page screenshots of Home, Projects, Contact  
 
 Challenges & Learnings  
-- Mac setup issues — ran into errors with xcrun and mismatched architecture. Fixed it by reinstalling Apple Command Line Tools and making sure the environment was arm64-native.  
-- GitHub repo structure — Git ignores empty folders, so I added a placeholder (.gitkeep) to commit module_1 properly.  
-- Flask environment — got "module not found: flask" errors when running outside the venv. Solved by always activating .venv first.  
-- Templates — Flask couldn’t find pages until the files had the .html extension. Renaming them fixed the issue.  
-
-That’s it—quick, simple, and ready to go.  
+- Fixed architecture mismatch on Mac by reinstalling Apple Command Line Tools.  
+- Learned Git tracks only non-empty folders (used .gitkeep initially).  
+- Resolved "flask not found" by activating venv before running.  
+- Tweaked CSS until nav hover/active and page themes matched requirements.  
