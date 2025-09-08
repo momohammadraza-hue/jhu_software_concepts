@@ -1,48 +1,57 @@
-Checked robots.txt: https://www.thegradcafe.com/robots.txt  
-As of 9/7/25: general scraping allowed. /cgi-bin/ and /index-ad-test.php are disallowed.  
-Screenshot saved as screenshot.jpg.
+JHU Modern Software Concepts — Module 2: Web Scraping
+Author: Mohammad Raza
 
-LLM note: llm_hosting/app.py is included as required. Tested with sample_data.json.  
-Depending on environment, llm_hosting/app.py may output an empty cleaned file.  
-Main scraper/cleaner pipeline is tested separately and validated.  
+What this is
+	•	Scraper + cleaner + validator pipeline (GradCafe “computer science” query).
+	•	Outputs raw JSON (applicant_data.json) and cleaned JSON (llm_extend_applicant_data.json).
+	•	robots.txt checked — scraping allowed except /cgi-bin/ and /index-ad-test.php (screenshot.jpg).
+	•	LLM hosting app included (llm_hosting/app.py), tested with sample_data.json.
 
-Note: Installed certifi on macOS to resolve SSL/TLS verification with urllib3.  
-This is just an environment fix, not a scraping dependency.  
+What you need
+	•	Python 3.10+
+	•	urllib3, beautifulsoup4 (install from requirements.txt)
+	•	certifi (macOS only, fixes SSL issue with urllib3)
+	•	Virtual environment recommended
 
-==================================================
-Module 2 – Submission Status
-==================================================
-- Rows merged: 11,566 (applicant_data.json)  
-- Pipeline works end-to-end: scrape → clean → validate  
-- Validator: 0 HTML fragments flagged in both raw and cleaned samples  
-- Query “computer science” appears exhausted. Scraper supports resume or broader query.  
+How to run it
+	1.	cd module_2
+	2.	python3 -m venv .venv
+	3.	source .venv/bin/activate   (Windows: ..venv\Scripts\Activate.ps1)
+	4.	pip install -r requirements.txt
+	•	macOS only: pip install certifi
+	5.	python scrape.py –pages 5 –delay 0.9
+	6.	python clean.py
+	7.	python validate.py
 
-==================================================
-How to Run
-==================================================
-cd module_2
-# (optional) create venv
-# python -m venv .venv && source .venv/bin/activate
+Where it runs
+	•	Local only — runs from CLI, saves JSON files to module_2/.
 
-pip install -r requirements.txt
-# on macOS also run: pip install certifi
+Status
+	•	Rows merged: 11,566 (applicant_data.json).
+	•	Pipeline works end-to-end: scrape → clean → validate.
+	•	Validator: 0 HTML fragments flagged in both raw and cleaned JSON.
+	•	Query “computer science” appears exhausted. Scraper supports resume or broader queries.
 
-# Scrape (small demo)
-python scrape.py --pages 5 --delay 0.9
-
-# Clean
-python clean.py
-
-# Validate
-python validate.py
-
-==================================================
-Resume / More Rows
-==================================================
-# Resume from next page range
-python scrape.py --start 2001 --pages 2000 --delay 0.9
-
-# Or broaden query (edit BASE in scrape.py):
-# BASE = "https://www.thegradcafe.com/survey/index.php?q=computer&page={page}"
-# Example:
+Resume / More rows
+	•	Resume from next page range:
+python scrape.py --start 2000 --pages 5000 --delay 0.9
+	•	Or broaden query (edit BASE in scrape.py):
+BASE = "https://www.thegradcafe.com/survey/index.php?q=computer&page={page}"
+Example:
 python scrape.py --start 1 --pages 2000 --delay 0.9
+
+Deliverables
+	•	scrape.py → scraper with resume + dedup
+	•	clean.py → data cleaner
+	•	validate.py → checks row count, keys, HTML fragments
+	•	applicant_data.json → raw scraped (11,566 rows)
+	•	llm_extend_applicant_data.json → cleaned output
+	•	requirements.txt → pinned dependencies
+	•	README.txt → run instructions + notes (this file)
+	•	screenshot.jpg → robots.txt proof
+
+Challenges & Learnings
+	•	Initial SSL verification failed on macOS → fixed with certifi.
+	•	“computer science” query has fewer results than expected; broadened query instructions added.
+	•	Learned how to stream JSONL + merge safely for resume.
+	•	Full end-to-end run validated with ~11.5k rows.
