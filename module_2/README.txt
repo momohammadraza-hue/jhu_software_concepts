@@ -1,5 +1,20 @@
-JHU Modern Software Concepts — Module 2: Web Scraping
-Author: Mohammad Raza
+Name / JHED
+- Mohammad Raza — mraaza6
+
+Module Info
+- EN.605.256 — Module 2: Web Scraping — Due: [date]
+
+Approach
+- Scraper: urllib3 + BeautifulSoup (table-first, card-fallback), regex for fields, JSONL streaming, resume + dedup. Saves to applicant_data.json.
+- Cleaner: standardizes fields, removes HTML, normalizes missing values, writes llm_extend_applicant_data.json.
+- Validator: checks row count, required keys, and flags HTML fragments.
+
+Known Bugs / Notes
+- Data volume: “computer science” query was exhausted at ~11,566 rows; README includes one-command resume/broaden steps.
+- macOS TLS: installed certifi to fix SSL verification (env-only, not scraping logic).
+
+Repo SSH
+- git@github.com:[org-or-user]/JHU_SOFTWARE_CONCEPTS.git
 
 What this is
 	•	Scraper + cleaner + validator pipeline (GradCafe “computer science” query).
