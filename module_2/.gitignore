@@ -1,0 +1,6 @@
+*.pyc
+__pycache__/
+.venv/
+module_2/run_*.jsonl
+module_2/applicant_data_BACKUP*.json*
+module_2/applicant_data_OLD*.json*
