@@ -86,3 +86,13 @@ Grader Notes
 	•	Robots.txt compliance screenshot included.
 	•	Requirements.txt reproducible.
 	•	Additional comments added to scraper/cleaner for PEP-8 clarity.
+⸻
+Grader Notes
+- This resubmission addresses prior feedback:
+  - ✅ ≥50,000 rows scraped, cleaned, and validated.
+  - ✅ Ran local Flask LLM host (module_2_new/llm_hosting/app.py) to standardize program/university; output: module_2_new/data/llm_extended.jsonl with fields llm_generated_program and llm_generated_university.
+  - ✅ Verified input/output row counts match and spot-checked canonicalization.
+- Only Module 2–approved libs used (urllib3, beautifulsoup4, regex, stdlib).
+- Robots.txt evidence included (screenshot.jpg).
+- requirements.txt reproducible.
+- Added docstrings/comments in scrape.py and clean.py for clarity; no logic changes.
