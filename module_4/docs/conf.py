@@ -13,6 +13,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 import os, sys
 sys.path.insert(0, os.path.abspath(".."))                # module_4/
 sys.path.insert(0, os.path.abspath("../src"))            # module_4/src
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon"]
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = "sphinx_rtd_theme"
