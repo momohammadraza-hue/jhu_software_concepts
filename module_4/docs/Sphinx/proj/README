@@ -1,0 +1,4 @@
+1. Navigate to a REPL Shell
+2. Run "cd docs/" to move into the 'docs' directory
+3. Run "make html" to have Sphinx generate the documentation
+4. The new index.html is under docs/build/html

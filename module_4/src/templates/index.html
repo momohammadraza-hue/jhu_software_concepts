@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #0f1218; --panel:#161b22; --text:#e6edf3; --muted:#9aa5b1;
+      --brand:#3ddc97; --btn:#1f2632; --btn-h:#314059; --btn-a:#3b4f70;
+      --ring: rgba(61,220,151,.35);
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--text);
+      font: 15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+    .wrap { max-width: 1080px; margin: 22px auto; padding: 0 16px; }
+
+    .top { display:flex; gap:12px; align-items:center; justify-content:space-between; }
+    .brand { font-weight:800; letter-spacing:.2px; }
+    .brand a { color: var(--brand); text-decoration:none; }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; }
+
+    .btn {
+      height: 40px; padding: 0 14px; display:inline-flex; align-items:center;
+      gap:8px; background:var(--btn); border:1px solid #2c3442; color:#c9d1d9;
+      border-radius:10px; cursor:pointer; text-decoration:none; font-size:14px; font-weight:600;
+      transition: background .15s ease, transform .02s ease, border-color .15s ease;
+    }
+    .btn:hover { background: var(--btn-h); border-color:#3a4d6b; }
+    .btn:active { background: var(--btn-a); transform: translateY(1px); }
+    .btn[disabled] { opacity:.55; cursor:not-allowed; }
+
+    /* Banner + reserved slot so layout doesn't jump */
+    #banner-slot { min-height: 44px; margin: 12px 0; }
+    #banner-slot .banner { margin: 0; }
+    .banner { margin:12px 0; padding:10px 14px; border-radius:10px;
+      background:#0f1a13; border:1px solid #1d3b2b; color:#bfe3cc; }
+
+    .kpis { display:grid; grid-template-columns: repeat(6, 1fr); gap:12px; }    
+    .kpi { background:var(--panel); border:1px solid #232a36; border-radius:12px; padding:12px; }
+    .kpi h4 { margin:0 0 6px; font-size:12px; color:var(--muted); font-weight:600; }
+    .kpi .val { font-size:22px; font-weight:800; letter-spacing:.2px; }
+
+    .note { background:var(--panel); border:1px solid #232a36; border-radius:12px;
+      padding:12px; margin:14px 0; }
+
+    .grid { display:grid; grid-template-columns: 1fr 1fr; gap:16px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+    .card { background:var(--panel); border:1px solid #232a36; border-radius:14px; padding:14px; }
+    .card h3 { margin:0 0 10px; font-size:16px; }
+
+    table { width:100%; border-collapse:collapse; font-size:14px;
+      border:1px solid #2a3241; border-radius:10px; overflow:hidden; }
+    thead th { background:#121720; color:#cfd6de; text-align:left; padding:8px 10px; border-bottom:1px solid #2a3241; }
+    tbody td { padding:8px 10px; border-bottom:1px dashed #232a36; color:#d6dee7; }
+    tbody tr:last-child td { border-bottom:none; }
+
+    canvas { width:100%; height:260px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="top">
+      <div class="brand">Mohammad Raza • <a href="#">GradCafe Analysis</a></div>
+      <form method="post" class="actions">
+        <button class="btn" formaction="/pull"  data-testid="pull-data-btn"   {{ 'disabled' if busy else '' }}>⟳ Pull Data</button>
+<button class="btn" formaction="/update" data-testid="update-analysis-btn" {{ 'disabled' if busy else '' }}>✳ Update Analysis</button>
+        <a class="btn" href="/download.csv">⬇ Download CSV</a>
+        <button type="button" class="btn" id="btn-copy">📋 Copy</button>
+      </form>
+    </div>
+
+    <div id="banner-slot">
+    {% if busy %}
+        <div class="banner">Working… pulling data and refreshing analysis. This page will auto-refresh when done.</div>
+    {% elif msg %}
+        <div class="banner">{{ msg }}</div>
+    {% endif %}
+    </div>
+
+    <div class="kpis">
+        <div class="kpi"><h4>Year (Fall)</h4><div class="val">{{ summary.year }}</div></div>
+        <div class="kpi"><h4>Applicants</h4><div class="val">{{ summary.fall_count }}</div></div>
+        <div class="kpi"><h4>% International (all-time)</h4><div class="val">{{ summary.intl_pct }}%</div></div>
+        <div class="kpi"><h4>Avg GPA (all-time)</h4><div class="val">{{ summary.avg_gpa }}</div></div>
+        <div class="kpi"><h4>Acceptance % (Fall)</h4><div class="val">{{ summary.accept_pct_fall or '—' }}</div></div>
+        <div class="kpi"><h4>Total Rows</h4><div class="val">{{ blocks.total_rows }}</div></div>
+    </div>
+
+    <div class="note">
+      <ul style="margin:8px 0 0 18px;">
+        <li>Applicants / Acceptance % / Avg GPA (and Americans / Accepted) for <b>Fall {{ summary.year }}</b>.</li>
+        <li>All-time: % International, Top programs by volume (with acceptance %), and acceptance by GPA bucket.</li>
+        <li>Targeted counts: JHU Masters in CS (normalized, all-time) and Georgetown PhD CS acceptances for {{ summary.year }}.</li>
+      </ul>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Q1–Q6 • Core Metrics</h3>
+        <table>
+          <thead><tr><th>Metric</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>Fall {{ summary.year }} applicants</td><td>{{ blocks.fall_count }}</td></tr>
+            <tr><td>Percent International (all-time)</td><td>{{ blocks.percent_intl }}%</td></tr>
+            <tr><td>Avg GPA / GRE / GRE-V / GRE-AW (all-time)</td>
+              <td>{{ blocks.avg_gpa }} / {{ blocks.avg_gre }} / {{ blocks.avg_grev }} / {{ blocks.avg_greaw }}</td></tr>
+            <tr><td>Avg GPA (American, Fall)</td><td>{{ blocks.avg_gpa_american or '—' }}</td></tr>
+            <tr><td>Acceptance % (Fall)</td><td>{{ blocks.accept_pct_fall or '—' }}{% if blocks.accept_pct_fall %}%{% endif %}</td></tr>
+            <tr><td>Avg GPA (Accepted, Fall)</td><td>{{ blocks.avg_gpa_accepted or '—' }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Q7–Q8 • Targeted Counts</h3>
+        <table>
+          <thead><tr><th>Question</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td>JHU Masters in Computer Science (normalized, all-time)</td><td>{{ blocks.jhu_cs_ms }}</td></tr>
+            <tr><td>Georgetown PhD CS Acceptances ({{ summary.year }})</td><td>{{ blocks.georgetown_phd_cs_accepted }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Q9 • Top-10 Programs by Volume (+ Acceptance %)</h3>
+        <table>
+          <thead><tr><th>Program</th><th>Total</th><th>Accepted</th><th>Acc %</th></tr></thead>
+          <tbody>
+            {% for r in blocks.top_programs %}
+              <tr><td>{{ r.program }}</td><td>{{ r.n_total }}</td><td>{{ r.n_acc }}</td><td>{{ r.acc_rate }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <canvas id="chart-programs"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Q10 • Acceptance Rate by GPA Bucket</h3>
+        <table>
+          <thead><tr><th>Bucket</th><th>Total</th><th>Accepted</th><th>Acc %</th></tr></thead>
+          <tbody>
+            {% for r in blocks.gpa_buckets %}
+              <tr><td>{{ r.bucket }}</td><td>{{ r.n_total }}</td><td>{{ r.n_acc }}</td><td>{{ r.acc_rate }}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <canvas id="chart-gpa"></canvas>
+      </div>
+
+      <div class="card" style="grid-column: 1 / -1;">
+        <h3>Applications by Year (volume + acceptance %)</h3>
+        <canvas id="chart-years"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <script>
+    // Copy visible tables as plain text
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const txt = [...document.querySelectorAll('table')].map(t => t.innerText).join('\n\n');
+      navigator.clipboard.writeText(txt);
+    });
+
+    // Chart data
+    const CHART = {{ blocks.chart | tojson }};
+
+    // Top programs: bars = totals, trend line = acceptance %
+    new Chart(document.getElementById('chart-programs').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: CHART.top_programs.labels,
+        datasets: [
+          { label: 'Total (all-time)', data: CHART.top_programs.totals },
+          { label: 'Acceptance %', type: 'line', data: CHART.top_programs.acc_rate, yAxisID: 'y1', tension: 0.35, pointRadius: 2 }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true } },
+        scales: {
+          y: { beginAtZero: true },
+          y1: { position: 'right', beginAtZero: true, ticks: { callback: v => v + '%' } }
+        }
+      }
+    });
+
+    // GPA buckets: bars = totals, trend line = acceptance %
+    new Chart(document.getElementById('chart-gpa').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: CHART.gpa_buckets.labels,
+        datasets: [
+          { label: 'Total', data: CHART.gpa_buckets.totals },
+          { label: 'Acceptance %', type: 'line', data: CHART.gpa_buckets.acc_rate, yAxisID: 'y1', tension: 0.35, pointRadius: 2 }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true } },
+        scales: {
+          y: { beginAtZero: true },
+          y1: { position: 'right', beginAtZero: true, ticks: { callback: v => v + '%' } }
+        }
+      }
+    });
+
+    // Yearly: bars = totals, trend line = acceptance %
+    new Chart(document.getElementById('chart-years').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: CHART.years.labels,
+        datasets: [
+          { label: 'Total', data: CHART.years.totals },
+          { label: 'Acceptance %', type: 'line', data: CHART.years.acc_rate, yAxisID: 'y1', tension: 0.35, pointRadius: 2 }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true } },
+        scales: {
+          y: { beginAtZero: true },
+          y1: { position: 'right', beginAtZero: true, ticks: { callback: v => v + '%' } }
+        }
+      }
+    });
+
+    // Auto-refresh after /pull completes
+    (function poll(){
+      {% if busy %}
+      const iv = setInterval(async () => {
+        try {
+          const r = await fetch('/status', {cache:'no-store'});
+          const j = await r.json();
+          if (j && j.busy === false) { clearInterval(iv); location.reload(); }
+        } catch (_) {}
+      }, 1500);
+      {% endif %}
+    })();
+  </script>
+  <script>
+    // Auto-hide message banner (not the busy one) after 4s
+    (function () {
+      const isBusy = {{ 'true' if busy else 'false' }};
+      if (isBusy) return;
+      const slot = document.getElementById('banner-slot');
+      const msg = slot ? slot.querySelector('.banner') : null;
+      if (msg) setTimeout(() => { msg.remove(); }, 4000);
+    })();
+  </script>
+</body>
+</html>

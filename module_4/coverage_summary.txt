@@ -1,0 +1,11 @@
+.............                                                            [100%]
+
+--------- coverage: platform darwin, python 3.12.10-final-0 ----------
+Name                           Stmts   Miss  Cover   Missing
+------------------------------------------------------------
+module_4/src/analysis_app.py     102      0   100%
+------------------------------------------------------------
+TOTAL                            102      0   100%
+
+Required test coverage of 100% reached. Total coverage: 100.00%
+13 passed in 0.62s
