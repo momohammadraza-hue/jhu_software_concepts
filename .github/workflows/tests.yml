@@ -41,9 +41,10 @@ jobs:
 
       - name: Run tests with coverage
         env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+            DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
         run: |
-          pytest | tee module_4/coverage_summary.txt
+            mkdir -p module_4
+            pytest | tee module_4/coverage_summary.txt
 
       - name: Upload coverage summary artifact
         uses: actions/upload-artifact@v4
