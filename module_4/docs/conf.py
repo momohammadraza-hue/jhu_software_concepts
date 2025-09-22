@@ -1,20 +1,19 @@
-# -- Project information -----------------------------------------------------
-project = "GradCafe Analysis"
-author = "Mohammad Raza"
-version = "1.0"
-release = "1.0"
-
 # -- General configuration ---------------------------------------------------
 extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon"]
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-# Make the app package importable for autodoc (paths relative to module_4/docs/)
+# Make the packages importable for autodoc
 import os, sys
-sys.path.insert(0, os.path.abspath(".."))                # module_4/
-sys.path.insert(0, os.path.abspath("../src"))            # module_4/src
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon"]
+HERE = os.path.abspath(os.path.dirname(__file__))          # module_4/docs
+ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))     # repo root
+MOD4 = os.path.join(ROOT, "module_4")                      # module_4/
+SRC = os.path.join(MOD4, "src")                            # module_4/src
 
-# -- Options for HTML output -------------------------------------------------
+for p in (ROOT, MOD4, SRC):
+    if p not in sys.path:
+        sys.path.insert(0, p)
+
+# -- HTML theme --------------------------------------------------------------
 html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]

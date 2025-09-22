@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>API Reference &mdash; GradCafe Analysis 1.0 documentation</title>
+  <title>API Reference &mdash; Project name not set  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -31,7 +31,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            GradCafe Analysis
+            Project name not set
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,7 +46,12 @@
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview &amp; Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#routes">Routes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependency-injection">Dependency Injection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module_4.src.analysis_app.create_app"><code class="docutils literal notranslate"><span class="pre">create_app()</span></code></a></li>
+</ul>
+</li>
 </ul>
 
         </div>
@@ -55,7 +60,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">GradCafe Analysis</a>
+          <a href="index.html">Project name not set</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -73,8 +78,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
+  <section id="module-module_4.src.analysis_app">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-module_4.src.analysis_app" title="Link to this heading"></a></h1>
+<p>GradCafe Analysis Flask app.</p>
+<section id="routes">
+<h2>Routes<a class="headerlink" href="#routes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/</span></code> and <code class="docutils literal notranslate"><span class="pre">/analysis</span></code>: render the dashboard.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/pull</span></code>: start a background scrape (if not busy).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/update</span></code>: recompute analysis from the database.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/status</span></code>: JSON busy flag.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/download.csv</span></code>: download a CSV export.</p></li>
+</ul>
+</section>
+<section id="dependency-injection">
+<h2>Dependency Injection<a class="headerlink" href="#dependency-injection" title="Link to this heading"></a></h2>
+<p>The app is built for testing with fake/mocked functions via <code class="docutils literal notranslate"><span class="pre">app.config</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SCRAPER(conn)</span> <span class="pre">-&gt;</span> <span class="pre">list[tuple]</span></code>: returns rows to insert.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LOADER(conn,</span> <span class="pre">rows)</span> <span class="pre">-&gt;</span> <span class="pre">int</span></code>: inserts rows and returns count.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">QUERY(conn)</span> <span class="pre">-&gt;</span> <span class="pre">dict</span></code>: returns <code class="docutils literal notranslate"><span class="pre">{&quot;summary&quot;:</span> <span class="pre">{...},</span> <span class="pre">&quot;blocks&quot;:</span> <span class="pre">{...}}</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">REFRESH(app)</span> <span class="pre">-&gt;</span> <span class="pre">None</span></code>: optional recompute hook.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DOWNLOAD(app)</span> <span class="pre">-&gt;</span> <span class="pre">bytes</span></code>: optional CSV bytes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DATABASE_URL</span></code>: Postgres connection string (tests can set a dummy).</p></li>
+</ul>
+</section>
+<dl class="py function">
+<dt class="sig sig-object py" id="module_4.src.analysis_app.create_app">
+<span class="sig-prename descclassname"><span class="pre">module_4.src.analysis_app.</span></span><span class="sig-name descname"><span class="pre">create_app</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Flask</span></span></span><a class="headerlink" href="#module_4.src.analysis_app.create_app" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 </section>
 
 

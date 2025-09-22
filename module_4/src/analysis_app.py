@@ -1,19 +1,24 @@
-"""
-Module 4 Flask app (GradCafe Analysis Dashboard).
+"""GradCafe Analysis Flask app.
 
-Goals (per Week 4):
-- Factory: create_app(config=None)
-- Routes your template expects:
-    GET  / and /analysis   -> render index.html
-    POST /pull             -> scrape+load (DI), 409 if busy
-    POST /update           -> refresh analysis (DI), 409 if busy
-    GET  /status           -> {"busy": bool}
-    GET  /download.csv     -> CSV snapshot
-- Busy-state: simple flag, no sleeps
-- Dependency Injection via app.config: SCRAPER, LOADER, QUERY, REFRESH
-- Context keys for template: title, busy, msg, summary, blocks (with blocks.chart)
-- Percent formatting: exactly two decimals where applicable
-"""
+Routes
+------
+- ``/`` and ``/analysis``: render the dashboard.
+- ``/pull``: start a background scrape (if not busy).
+- ``/update``: recompute analysis from the database.
+- ``/status``: JSON busy flag.
+- ``/download.csv``: download a CSV export.
+
+Dependency Injection
+--------------------
+The app is built for testing with fake/mocked functions via ``app.config``:
+
+- ``SCRAPER(conn) -> list[tuple]``: returns rows to insert.
+- ``LOADER(conn, rows) -> int``: inserts rows and returns count.
+- ``QUERY(conn) -> dict``: returns ``{"summary": {...}, "blocks": {...}}``.
+- ``REFRESH(app) -> None``: optional recompute hook.
+- ``DOWNLOAD(app) -> bytes``: optional CSV bytes.
+- ``DATABASE_URL``: Postgres connection string (tests can set a dummy).
+""" 
 
 from __future__ import annotations
 
