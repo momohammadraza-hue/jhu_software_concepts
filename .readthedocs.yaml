@@ -7,12 +7,8 @@ build:
 sphinx:
   configuration: module_4/docs/conf.py
 
-# We don't need to build any extra formats like PDF/ePub
 formats: []
 
 python:
   install:
-    # Install runtime deps needed by autodoc imports (Flask, etc.)
-    - requirements: module_4/requirements.txt
-    # Install Sphinx + theme
     - requirements: module_4/requirements-docs.txt

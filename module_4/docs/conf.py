@@ -1,5 +1,6 @@
 # -- General configuration ---------------------------------------------------
 extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon"]
+autodoc_mock_imports = ["psycopg", "psycopg2", "psycopg2-binary"]
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
