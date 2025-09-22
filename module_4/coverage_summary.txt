@@ -8,4 +8,4 @@ module_4/src/analysis_app.py     102      0   100%
 TOTAL                            102      0   100%
 
 Required test coverage of 100% reached. Total coverage: 100.00%
-13 passed in 0.62s
+13 passed in 0.51s
