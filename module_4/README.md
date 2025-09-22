@@ -66,6 +66,7 @@ Deliverables
 - actions_success.png — CI success proof
 - sphinx_success.png — docs build proof
 - README.md — this file
+- Readthedocs URL - https://jhu-software-concepts-mohammad.readthedocs.io/en/latest/
 
 Repo Link
 - Public GitHub Repository: https://github.com/momohammadraza-hue/jhu_software_concepts
